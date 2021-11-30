@@ -1,0 +1,47 @@
+@page "/course/{CourseId:guid}/participant/add"
+
+<style>
+    .marginRight{
+        text-align: right;
+        border-right: 1px solid black;
+    }
+    .list{
+        margin: 3px;
+    }
+    .text-danger
+</style>
+
+<div class="row">
+    <div class="col marginRight">
+        <h3>Učastníci v systému</h3>
+        @if(ParticipantInSystem != null)
+        {
+            @foreach (var participant in ParticipantInSystem)
+            {
+                <div class="list">
+                    <label>
+                        @participant.Name @participant.Nickname @participant.Surname
+                    </label>
+                    <button @onclick="() => ToCourse(participant.Id)" class="btn btn-success"> &rArr; </button>
+                </div>
+            }
+        }
+    </div>
+    <div class="col">
+        <h3>Účastníci zvoleného kurzu</h3>
+        @if (ParticipantsInCourse != null)
+        {
+            @foreach (var participant in ParticipantsInCourse)
+            {
+                bool disabled = participant.ScheduleData.Count > 0;
+                string style = disabled ? "text-danger" : "";
+                <div class="list">
+                    <button @onclick="() => FromCourse(participant.Id)" class="btn btn-warning" disabled="@disabled"> &lArr; </button>
+                    <label>@participant.Name @participant.Nickname @participant.Surname
+                        <span class="@style" >(Výskyt : @participant.ScheduleData.Count) </span>
+                    </label>
+                </div>
+            }
+        }
+    </div>
+</div>

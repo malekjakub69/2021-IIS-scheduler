@@ -1,0 +1,47 @@
+@using Microsoft.IdentityModel.Tokens
+@using AppModels.Models.Schedules
+@using AppModels.Models.Courses
+@using System.Threading
+
+@namespace Web.Pages.Schedule
+
+@if (Leaders != null)
+{
+    int errorBreak = 500;
+    List<ScheduleDetailDataModel> timeBlockData = TimeBlock.ScheduleDataList;
+    bool first = true;
+    <tbody>
+    @while (!timeBlockData.IsNullOrEmpty() && errorBreak > 0)
+    {
+        errorBreak--;
+        <tr>
+            @if (first)
+            {
+                <td class="timeTD" rowspan="10">
+                    <div>
+                        @TimeBlock.From.Hour.ToString("D2") : @TimeBlock.From.Minute.ToString("D2")
+                        <br/>
+                        -
+                        <br/>
+                        @TimeBlock.To.Hour.ToString("D2") : @TimeBlock.To.Minute.ToString("D2")
+                    </div>
+                </td>
+                first = false;
+            }
+            @foreach (var leader in Leaders)
+            {
+                <td>
+                    @{
+                        ScheduleDetailDataModel Item = timeBlockData.Find(a => a.Leader.Id == leader.Leader.Id);
+                        timeBlockData.Remove(Item);
+                        if (Item != null)
+                        {
+                            <ScheduleItem Item="Item"/>
+                        }
+                    }
+                </td>
+            }
+        </tr>
+    }
+    </tbody>
+}

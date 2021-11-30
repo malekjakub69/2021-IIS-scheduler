@@ -1,0 +1,32 @@
+@using AppModels.Models.Courses
+@namespace Web.Pages.Schedule
+
+<p>Vybraný rozvrh :</p>
+<select @onchange="SelectId" class="form-control">
+    @if (Schedules != null)
+    {
+        <option disabled selected value> -- Zvolte možnost -- </option>
+        @foreach (var schedule in Schedules)
+        {
+            <option value="@schedule.Id">@schedule.Name</option>
+        }
+    }
+</select>
+
+<br/><br/>
+
+@if (SelectedId != Guid.Empty)
+{
+    if (Schedules != null)
+    {
+        CourseDetailScheduleListModel schedule = Schedules.Find(item => item.Id == SelectedId);
+        if (schedule != null)
+        {
+            foreach (var timeBlock in schedule.TimeBlockList)
+            {
+                <TimeBlockEditItem TimeBlockId="timeBlock.Id"/>
+            }
+            <TimeBlockNewItem ScheduleId="SelectedId"/>
+        }
+    }
+}

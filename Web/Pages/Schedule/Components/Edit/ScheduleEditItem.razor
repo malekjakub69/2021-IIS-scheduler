@@ -1,0 +1,23 @@
+@namespace Web.Pages.Schedule
+@if (Schedule != null)
+{
+    <div>
+        <EditForm Model="@Schedule">
+            <div class="form-group">
+                <InputText @bind-Value="@Schedule.Name" class="form-control"/>
+                <small class="form-text text-danger">
+                    <ValidationMessage For="@(() => Schedule.Name)"/>
+                </small>
+                <button @onclick="Update" class="btn btn-info">Uložit</button>
+                @if (Schedule.TimeBlockList.Count == 0)
+                {
+                    <button @onclick="Remove" class="btn btn-danger">Smazat</button>
+                }
+                else
+                {
+                    <button disabled class="btn btn-outline-danger">Nejdříve smaž časové bloky</button>
+                }
+            </div>
+        </EditForm>
+    </div>
+}

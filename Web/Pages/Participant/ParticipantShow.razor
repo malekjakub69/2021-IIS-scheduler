@@ -1,0 +1,51 @@
+@page "/course/{courseId:guid}/participant/show"
+
+<style>
+    td,th{
+        text-align: center;
+    }
+</style>
+
+
+<table class="table table-striped">
+    <thead>
+    <tr class="bg-info">
+        <th scope="col">#</th>
+        <th scope="col">Jméno</th>
+        <th scope="col">Přezdívka</th>
+        <th scope="col">Příjmení</th>
+        <th scope="col">Vytíženost</th>
+        <th scope="col">Splněno</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (Participants != null)
+    {
+        int index = 0;
+        @foreach (var participant in Participants)
+        {
+            index++;
+            <tr>
+                <th scope="row">
+                    @index
+                </th>
+                <td>
+                    @participant.Participant.Name
+                </td>
+                <td>
+                    @participant.Participant.Nickname
+                </td>
+                <td>
+                    @participant.Participant.Surname
+                </td>
+                <td>
+                    @participant.Participant.ScheduleData.Count
+                </td>
+                <td>
+                    @participant.Participant.DoneList.Count
+                </td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>

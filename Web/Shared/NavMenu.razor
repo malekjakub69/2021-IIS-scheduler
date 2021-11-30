@@ -1,0 +1,202 @@
+﻿@using System.Text.Encodings.Web
+@using Web.Shared;
+<div class="top-row pl-4 navbar navbar-dark">
+    <a class="navbar-brand" href="">Skautský rozvrh</a>
+    <button class="navbar-toggler">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</div>
+
+<div>
+    <ul class="nav flex-column">
+        <li class="nav-item px-3">
+            <SelectCourse @ref="selectCourse"/>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" @onclick=@ToggleScheduleMenu>
+                Rozvrh ↓
+            </NavLink>
+        </li>
+        @if (_scheduleSubmenu)
+        {
+            <ul>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href=@selectCourse.ShowScheduleHref>
+                        Zobrazit
+                    </NavLink>
+                </li>
+                <AuthorizeView Roles="Leader, Administrator">
+                        <li class="nav-item px-3">
+                            <NavLink class="nav-link" href="@selectCourse.AddScheduleHref">
+                                Přidat položku
+                            </NavLink>
+                        </li>
+                </AuthorizeView>
+                <AuthorizeView Roles="Leader, Administrator">
+                        <li class="nav-item px-3">
+                            <NavLink class="nav-link" href="@selectCourse.EditScheduleHref">
+                                Editovat
+                            </NavLink>
+                        </li>
+                </AuthorizeView>
+            </ul>
+        }
+        <AuthorizeView Roles="User, Leader, Administrator">
+                <li class="nav-item px-3 ">
+                    <NavLink class="nav-link" @onclick=@ToggleCompetencesMenu>
+                        Kompetence ↓
+                    </NavLink>
+                </li>
+                @if (_competencesSubmenu)
+                {
+                    <ul>
+                
+                                <li class="nav-item px-3">
+                                    <NavLink class="nav-link" href=@selectCourse.ShowCompetenceHref>
+                                        Zobrazit
+                                    </NavLink>
+                                </li>
+                    </ul>
+                }
+        </AuthorizeView>
+        <AuthorizeView Roles="Leader, Administrator">
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" @onclick=@ToggleLeaderMenu>
+                        Vedoucí ↓
+                    </NavLink>
+                </li>
+                @if (_leaderSubmenu)
+                {
+                    <ul>
+                        <li class="nav-item px-3">
+                                    <NavLink class="nav-link" href=@selectCourse.ShowLeaderHref>
+                                        Zobrazit
+                                    </NavLink>
+                                </li>
+                    </ul>
+                }
+        
+        </AuthorizeView>
+        <AuthorizeView Roles="Leader, Administrator">
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" @onclick=@ToggleParticipantMenu>
+                        Účastník ↓
+                    </NavLink>
+                </li>
+                @if (_participantSubmenu)
+                {
+                    <ul>
+                        <li class="nav-item px-3">
+                                    <NavLink class="nav-link" href=@selectCourse.ShowParticipantHref>
+                                        Zobrazit
+                                    </NavLink>
+                                </li>
+                    </ul>
+                }
+        </AuthorizeView>
+        <AuthorizeView Roles="Administrator">
+                        <li class="nav-item px-3">
+                            <NavLink class="nav-link" @onclick=@ToggleParticipantMenu>
+                                Admin ↓
+                            </NavLink>
+                        </li>
+                        @if (_participantSubmenu)
+                        {
+                            <ul>
+                                <li class="nav-item px-3">
+                                    <NavLink class="nav-link" href="@selectCourse.AddToCourseParticipantHref">
+                                        Přidat Účastníka do kurzu
+                                    </NavLink>
+                                </li>
+                                
+                                <li class="nav-item px-3">
+                                    <NavLink class="nav-link" href="@selectCourse.AddToCourseLeaderHref">
+                                        Přidat Vedoucího do kurzu
+                                    </NavLink>
+                                </li>
+                            </ul>
+                        }
+                </AuthorizeView>
+    </ul>
+    <ul class="nav flex-column">
+        <AuthorizeView>
+            <Authorized>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="user">
+                        Uživatel
+                    </NavLink>
+                </li>
+                <li class="nav-item px-3">
+                    <button @onclick="SignOut" class="btn btn-primary btn-lg">
+                        Odhlásit
+                    </button>
+                </li>
+            </Authorized>
+            <NotAuthorized>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="signin">
+                        Přihlásit
+                    </NavLink>
+                </li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="register">
+                        Registrovat
+                    </NavLink>
+                </li>
+            </NotAuthorized>
+        </AuthorizeView>
+    </ul>
+</div>
+
+@code {
+    private SelectCourse selectCourse;
+
+    private bool _scheduleSubmenu = false;
+    private bool _competencesSubmenu = false;
+    private bool _participantSubmenu = false;
+    private bool _leaderSubmenu = false;
+
+    private void ToggleScheduleMenu()
+    {
+        _participantSubmenu = false;
+        _leaderSubmenu = false;
+        _competencesSubmenu = false;
+        _scheduleSubmenu = !_scheduleSubmenu;
+    }
+    private void ToggleCompetencesMenu()
+    {
+        _participantSubmenu = false;
+        _leaderSubmenu = false;
+        _scheduleSubmenu = false;
+        _competencesSubmenu = !_competencesSubmenu;
+    }
+    private void ToggleLeaderMenu()
+    {
+        _participantSubmenu = false;
+        _competencesSubmenu = false;
+        _scheduleSubmenu = false;
+        _leaderSubmenu = !_leaderSubmenu;
+    }
+    private void ToggleParticipantMenu()
+    {
+        _leaderSubmenu = false;
+        _competencesSubmenu = false;
+        _scheduleSubmenu = false;
+        _participantSubmenu = !_participantSubmenu;
+    }
+
+    [Inject] ILocalStorageService LocalStorageService { get; set; }
+    [Inject] AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+    [Inject] NavigationManager NavigationManager { get; set; }
+    private async Task SignOut()
+    {
+        if (await LocalStorageService.ContainKeyAsync("bearerToken"))
+        {
+            await LocalStorageService.RemoveItemAsync("bearerToken");
+            ((AppAuthenticationStateProvider)AuthenticationStateProvider).SignOut();
+        }
+
+        StateHasChanged();
+        NavigationManager.NavigateTo("/");
+    }
+}

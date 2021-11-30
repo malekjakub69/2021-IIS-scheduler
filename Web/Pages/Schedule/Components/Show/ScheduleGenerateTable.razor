@@ -1,0 +1,20 @@
+
+@namespace Web.Pages.Schedule
+
+<thead>
+<tr>
+    <th>
+        Čas
+    </th>
+    
+    @if (Leaders != null)
+    {
+        @foreach (var leader in Leaders)
+        {
+            <th>@leader.Leader.Nickname</th>
+        }
+    }
+</tr>
+</thead>
+
+<ScheduleShowData Data="@TimeBlockData" Leaders="@Leaders"/>

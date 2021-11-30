@@ -1,0 +1,10 @@
+@page "/course/{CourseId:guid}/schedule/edit"
+<h3>Editace Rozvrhů</h3>
+        
+<ScheduleEditComponent CourseId="CourseId" Schedules="@Schedules"/>
+    
+<h3>Editace Časových bloků</h3>
+
+<TimeBlockEditComponent Schedules="@Schedules"/>
+
+

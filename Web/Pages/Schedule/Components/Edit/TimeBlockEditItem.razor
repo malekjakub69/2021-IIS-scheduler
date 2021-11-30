@@ -1,0 +1,21 @@
+@using System.Linq.Expressions
+@using Newtonsoft.Json
+@using Syncfusion.Blazor.Calendars;
+@namespace Web.Pages.Schedule
+@if (TimeBlock != null)
+{
+    <div>
+        <EditForm Model="@TimeBlock">
+            <div class="form-group">
+                <SfTimePicker TValue="DateTime?" Value="@TimeBlock.From" Step=60 Format="HH:mm"></SfTimePicker>
+                <SfTimePicker TValue="DateTime?" Value="@TimeBlock.To" Step=60 Format="HH:mm"></SfTimePicker>
+                <button @onclick="Update" class="btn btn-info">Uložit</button>
+                <button @onclick="Remove" class="btn btn-danger">Smazat</button>
+            </div>
+        </EditForm>
+    </div>
+}
+
+@code{
+    
+}

@@ -1,0 +1,46 @@
+@page "/course/{CourseId:guid}/leader/add"
+<style>
+    .marginRight{
+        text-align: right;
+        border-right: 1px solid black;
+    }
+    .list{
+        margin: 3px;
+    }
+    .text-danger
+</style>
+
+<div class="row">
+    <div class="col marginRight">
+        <h3>Vedoucí v systému</h3>
+        @if(LeaderInSystem != null)
+        {
+            @foreach (var leader in LeaderInSystem)
+            {
+                <div class="list">
+                    <label>
+                        @leader.Name @leader.Nickname @leader.Surname
+                    </label>
+                    <button @onclick="() => ToCourse(leader.Id)" class="btn btn-success"> &rArr; </button>
+                </div>
+            }
+        }
+    </div>
+    <div class="col">
+        <h3>Vedoucí zvoleného kurzu</h3>
+        @if (LeadersInCourse != null)
+        {
+            @foreach (var leader in LeadersInCourse)
+            {
+                bool disabled = leader.ScheduleDataList.Count > 0;
+                string style = disabled ? "text-danger" : "";
+                <div class="list">
+                    <button @onclick="() => FromCourse(leader.Id)" class="btn btn-warning" disabled="@disabled"> &lArr; </button>
+                    <label>@leader.Name @leader.Nickname @leader.Surname
+                        <span class="@style" >(Výskyt : @leader.ScheduleDataList.Count) </span>
+                    </label>
+                </div>
+            }
+        }
+    </div>
+</div>

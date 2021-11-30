@@ -1,0 +1,10 @@
+@namespace Web.Pages.Schedule
+
+@if (Schedules != null)
+{
+    @foreach (var schedule in Schedules)
+    {
+        <ScheduleEditItem ScheduleId="schedule.Id"/>
+    }
+}
+<ScheduleNewItem CourseId="CourseId"/>

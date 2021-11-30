@@ -1,0 +1,51 @@
+@page "/course/{CourseId:guid}/schedule"
+
+<select @onchange="SelectSchedule" class="form-control">
+    <option disabled selected value> -- Zvolte možnost -- </option>
+    @if (Schedules != null)
+    {
+        @foreach (var schedule in Schedules)
+        {
+            <option value="@schedule.Id">
+                @schedule.Name
+            </option>
+        }
+    }
+</select>
+    @if (ScheduleId != Guid.Empty)
+    {
+        <table>
+            <ScheduleGenerateTable CourseId="@CourseId" ScheduleId="@ScheduleId"/>
+        </table>
+    }
+
+<style>
+    th, td {
+      text-align: center;
+    }
+    
+    table {
+      width: 100%;
+    }
+    
+    tbody{
+        border: 1px solid black;
+        border-radius: 10px;
+    }
+    
+    tbody
+    {
+        border-collapse:separate; 
+        border-spacing:5em;
+   
+    }
+    .scheduleItem{
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+        padding: 5px;
+    }
+    .timeTD{
+        width: 80px;
+    }
+</style>

@@ -1,0 +1,15 @@
+﻿@page "/user/{UserId:guid}"
+
+@if (User != null)
+{
+<h3>Uživatel @User.Username</h3>
+
+<p>Email : @User.Email </p>
+<p>Role : @MapUserRole(User.Role)</p>
+<a href="@($"/user/edit/{User.Id}")"> Editovat </a>
+<br />
+}
+
+@code {
+
+}

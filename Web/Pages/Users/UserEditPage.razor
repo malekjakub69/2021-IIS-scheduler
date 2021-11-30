@@ -1,0 +1,66 @@
+﻿@page "/user/edit/{UserId:guid}"
+@using AppEntities.Enums;
+
+@if (User != null)
+{
+    <EditForm Model="@User">
+        <DataAnnotationsValidator />
+        <div class="row">
+            <div class="col-md">
+                <div class="form-group">
+                    <label class="w-50">
+                        Jméno:
+                        <InputText @bind-Value="@User.Username" class="form-control" />
+                        <small class="form-text text-danger">
+                            <ValidationMessage For="@(()=>User.Username)" />
+                        </small>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label class="w-50">
+                        Heslo:
+                        <InputText @bind-Value="@User.PasswordHash" type="password" class="form-control" />
+                        <small class="form-text text-danger">
+                            <ValidationMessage For="@(()=>User.PasswordHash)" />
+                        </small>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label class="w-50">
+                        Role:
+                        <InputSelect id="role" @bind-Value="Role">
+                            <option value=@Roles.Admin>Administrator</option>
+                            <option value=@Roles.Leader>Vedoucí</option>
+                            <option value=@Roles.User>Běžný uživatel</option>
+                        </InputSelect>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </EditForm>
+    <hr>
+    <div class="d-flex justify-content-end mt-2 mb-2">
+        <button type="submit" @onclick="Update" class="btn btn-success mr-2">Uložit</button>
+        @if (UserId != Guid.Empty)
+        {
+            <button @onclick="Delete" class="btn btn-danger">Smazat</button>
+        }
+    </div>
+    <hr>
+    <div class="row">
+        @if (Edited)
+        {
+            <p>
+                Úspěšně změneno.
+            </p>
+        }
+        @if (Error)
+        {
+            <p>
+                Při úpravě došlo k chybě.
+            </p>
+        }
+    </div>
+}

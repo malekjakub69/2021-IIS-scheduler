@@ -1,0 +1,10 @@
+
+@namespace Web.Pages.Schedule
+
+@if (Data != null)
+{
+    @foreach (var timeBlock in Data)
+    {
+        <ScheduleTimeBlock Leaders="@Leaders" TimeBlock="@timeBlock"></ScheduleTimeBlock>
+    }
+}

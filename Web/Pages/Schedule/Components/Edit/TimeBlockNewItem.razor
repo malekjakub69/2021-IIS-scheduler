@@ -1,0 +1,18 @@
+@namespace Web.Pages.Schedule
+
+<div>
+    <EditForm Model="@TimeBlock">
+        <div class="form-group">
+            Přidat časový blok
+                <InputText @bind-Value="@DateTimeFrom" class="form-control"/>
+            <small class="form-text text-danger">
+                <ValidationMessage For="@(() => TimeBlock.From)"/>
+            </small>
+                <InputText @bind-Value="@DateTimeTo" class="form-control"/>
+            <small class="form-text text-danger">
+                <ValidationMessage For="@(() => TimeBlock.To)"/>
+            </small>
+            <button @onclick="Create" class="btn btn-success">Přidat</button>
+        </div>
+    </EditForm>
+</div>

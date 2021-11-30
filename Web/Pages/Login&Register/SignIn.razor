@@ -1,0 +1,69 @@
+﻿@page "/signin"
+
+<h3>Přihlášení</h3>
+
+@if (!signInSuccesful)
+{
+<EditForm Model="userToSignIn" OnValidSubmit="SignInUser">
+    <DataAnnotationsValidator />
+    <div class="form-group my-3">
+        <label for="email">Emailová Adresa</label>
+        <InputText @bind-Value="userToSignIn.Email" id="email" class="form-control" />
+        <ValidationMessage For="@(() =>userToSignIn.Email)" />
+    </div>
+
+    <div class="form-group my-3">
+        <label for="password">Heslo</label>
+        <InputText @bind-Value="userToSignIn.PasswordHash" type="password" id="password" class="form-control" />
+        <ValidationMessage For="@(() =>userToSignIn.PasswordHash)" />
+    </div>
+
+    <ValidationSummary/>
+
+    <button type="submit" class="btn btn-primary btn-lg">Přihlásit</button>
+
+    @if(attemptToSignInFailed)
+    {
+        <p class="my-3 text-danger">Přihlášení selhalo. Zkontrolujte si uživatelské jméno a heslo</p>
+    }
+    
+</EditForm>
+}
+else
+{
+    <h4>Přihlášení proběhlo úspěšně</h4>
+}
+
+@code {
+    [Inject] ILocalStorageService LocalStorageService { get; set; }
+    [Inject] AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+    [Inject] HttpClient HttpClient { get; set; }
+    private UserFormModel userToSignIn = new UserFormModel();
+    private bool signInSuccesful = false;
+    private bool attemptToSignInFailed = false;
+
+    private async Task SignInUser()
+    {
+        attemptToSignInFailed = false;
+
+        HttpResponseMessage httpResponseMessage = await HttpClient.PostAsJsonAsync(APIEndpoints.s_signin,userToSignIn);
+
+        if (httpResponseMessage.IsSuccessStatusCode)
+        {
+            string jsonWebToken = await httpResponseMessage.Content.ReadAsStringAsync();
+
+            await LocalStorageService.SetItemAsync("bearerToken", jsonWebToken);
+
+            await ((AppAuthenticationStateProvider)AuthenticationStateProvider).SignIn();
+
+            HttpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", jsonWebToken);
+
+            signInSuccesful = true;
+        }
+        else
+        {
+            attemptToSignInFailed = true;
+        }
+
+    }
+}

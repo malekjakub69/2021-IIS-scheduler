@@ -1,0 +1,66 @@
+﻿@page "/register"
+
+<h3>Registrace</h3>
+
+@if (!registerSuccesful)
+{
+<EditForm Model="userToRegister" OnValidSubmit="RegisterUser">
+    <DataAnnotationsValidator />
+    <div class="form-group my-3">
+        <label for="email">Emailová Adresa</label>
+        <InputText @bind-Value="userToRegister.Email" id="email" class="form-control" />
+        <ValidationMessage For="@(() =>userToRegister.Email)" />
+    </div>
+
+    <div class="form-group my-3">
+        <label for="password">Heslo</label>
+        <InputText @bind-Value="userToRegister.PasswordHash" type="password" id="password" class="form-control" />
+        <ValidationMessage For="@(() =>userToRegister.PasswordHash)" />
+    </div>
+
+    <ValidationSummary/>
+
+    <button type="submit" class="btn btn-primary btn-lg">Registrovat</button>
+
+    @if(attemptToRegisterFailed)
+    {
+        <p class="my-3 text-danger">@attemptToRegisterFailedErrorMessage</p>
+    }
+    
+</EditForm>
+}
+else
+{
+    <h4>Registrace proběhla úspěšně. Můžete se nyní přihlásit</h4>
+    <a href="/signin" class="btn btn-primary btn-lg">Přihlásit</a>
+}
+
+@code {
+    [Inject] HttpClient HttpClient { get; set; }
+    private UserFormModel userToRegister = new UserFormModel {
+        Email = "user@example.com",
+        PasswordHash = "!!!Heslo123"
+    };
+    private bool registerSuccesful = false;
+    private bool attemptToRegisterFailed = false;
+    private string attemptToRegisterFailedErrorMessage = null;
+
+    private async Task RegisterUser()
+    {
+        attemptToRegisterFailed = false;
+
+        HttpResponseMessage htttpResponseMessage = await HttpClient.PostAsJsonAsync(APIEndpoints.s_register,userToRegister);
+
+        if (htttpResponseMessage.IsSuccessStatusCode)
+        {
+            registerSuccesful = true;
+        }
+        else
+        {
+            string serverErrorMessages = await htttpResponseMessage.Content.ReadAsStringAsync();
+            attemptToRegisterFailedErrorMessage = $"{serverErrorMessages} Neplatná registrace. Zkontrolujte správnost vyplněných polí. ";
+            attemptToRegisterFailed = true;
+        }
+
+    }
+}

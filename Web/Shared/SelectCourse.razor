@@ -1,0 +1,13 @@
+<p style="color: white">Vybraný kurz :</p>
+@if (SelectedId != null)
+{
+<select value="@SelectedId.ToLower()" @onchange="UpdateNav" class="form-control">
+    @if (Courses != null)
+    {
+        @foreach (var course in Courses)
+        {
+            <option value="@course.Id">@course.Name @course.Year</option>
+        }
+    }
+</select>
+}

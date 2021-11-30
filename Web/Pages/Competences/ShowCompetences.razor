@@ -1,0 +1,36 @@
+@page "/course/{CourseId:guid}/competence/show"
+@using System.Reflection
+@using System.Text.Encodings.Web
+@using AppEntities.Enums
+
+@if (Participant != null)
+{
+    <h3 >@Participant.Name @Participant.Nickname @Participant.Surname</h3>
+        <ul>
+            @foreach (var competence in Competences)
+            {
+                bool check = false;
+                foreach (var variableDone in Participant.DoneList)
+                {
+                    if (variableDone.Competence.Id == competence.Id)
+                    {
+                        check = true;
+                        break;
+                    }
+                }
+
+                @if (check)
+                {
+                    <li style="background-color: forestgreen">
+                        <s> @competence.Name <small> ( @competence.Desc ) </small> </s>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        @competence.Name <small> ( @competence.Desc ) </small>
+                    </li>
+                }
+            }
+        </ul>
+}

@@ -1,0 +1,14 @@
+@namespace Web.Pages.Schedule
+
+    <div>
+        <EditForm Model="@Schedule">
+            <div class="form-group">
+                Přidat rozvrh
+                <InputText @bind-Value="@Schedule.Name" class="form-control"/>
+                <small class="form-text text-danger">
+                    <ValidationMessage For="@(() => Schedule.Name)"/>
+                </small>
+                <button @onclick="Create" class="btn btn-success">Přidat</button>
+            </div>
+        </EditForm>
+    </div>

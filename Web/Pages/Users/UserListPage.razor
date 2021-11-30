@@ -1,0 +1,19 @@
+﻿@page "/user"
+
+@if (Users != null)
+{
+    @foreach (var user in Users)
+    {
+        <div>
+            <p> Uživatel @user.Username</p>
+            <a href="@($"/user/{user.Id}")">Detail uživatele</a>
+            <a href="@($"/user/edit/{user.Id}")"> Editovat </a>
+            <br />
+        </div>
+    }
+}
+
+@code
+{
+
+}

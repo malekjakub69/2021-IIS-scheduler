@@ -1,0 +1,115 @@
+@using Microsoft.AspNetCore.Components
+@using Microsoft.EntityFrameworkCore
+@using AppEntities.Enums
+
+@namespace Web.Pages.Schedule
+
+@if (Participants != null && Leaders != null && Schedules != null)
+{
+    <FormModel>
+        <div class="row">
+            <div class="col-md">
+                <div class="form-group">
+                    <label class="w-50">
+                        Rozvrh :
+                        <select @onchange="SelectSchedule" class="form-control">
+                            <option disabled selected value> -- Zvolte možnost -- </option>
+                            @foreach (var schedule in Schedules)
+                            {
+                                <option value="@schedule.Id">
+                                    @schedule.Name
+                                </option>
+                            }
+                        </select>
+                    </label>
+                    <button @onclick="() => Redirect(scheduleEditPath)" class="btn btn-info mr-2"> Přidat Rozvrh </button>
+                </div>
+                @if (TimeBlocks != null)
+                {
+                    <div class="form-group">
+                        <label class="w-50">
+                            Časový úsek :
+                            <select @onchange="SelectTimeBlock" class="form-control">
+                                <option disabled selected="@timeBlockSelected" value> -- Zvolte možnost -- </option>
+                                @foreach (var timeBlock in TimeBlocks)
+                                {
+                                    <option value="@timeBlock.Id">
+                                        @timeBlock.From - @timeBlock.To
+                                    </option>
+                                }
+                            </select>
+                        </label>
+                        <button @onclick="() => Redirect(scheduleEditPath)" class="btn btn-info mr-2"> Přidat Časový úsek </button>
+                    </div>
+                }
+                <div class="form-group">
+                    <label class="w-50">
+                        Účastník :
+                        <select @onchange="SelectParticipant" class="form-control">
+                            <option disabled selected value> -- Zvolte možnost -- </option>
+                            @foreach (var participant in Participants)
+                            {
+                                <option value="@participant.Participant.Id">
+                                    @participant.Participant.Name @participant.Participant.Nickname @participant.Participant.Surname
+                                </option>
+                            }
+                        </select>
+                    </label>
+                    <button @onclick="() => Redirect(participantEditPath)" class="btn btn-info mr-2"> Upravit Účastníky </button>
+                </div>
+                <div class="form-group">
+                    <label class="w-50">
+                        Vedoucí :
+                        <select @onchange="SelectLeader" class="form-control">
+                            <option disabled selected value> -- Zvolte možnost -- </option>
+                            @foreach (var leader in Leaders)
+                            {
+                                <option value="@leader.Leader.Id">
+                                    @leader.Leader.Name @leader.Leader.Nickname @leader.Leader.Surname
+                                </option>
+                            }
+                        </select>
+                    </label>
+                    <button @onclick="() => Redirect(leaderEditPath)" class="btn btn-info mr-2"> Upravit Vedoucí </button>
+                </div>
+                @if (Competences != null)
+                {
+                    <div class="form-group">
+                        <label class="w-50">
+                            Kompetence :
+                            <select @onchange="SelectCompetence" class="form-control">
+                                <option disabled selected="@competenceSelected" value> -- Zvolte možnost -- </option>
+                                @foreach (var competence in Competences)
+                                {
+                                    <option value="@competence.Id">
+                                        @competence.Name
+                                    </option>
+                                }
+                            </select>
+                        </label>
+                        <button @onclick="() => Redirect(competenceEditPath)" class="btn btn-info mr-2"> Upravit Kompetence </button>
+                    </div>
+                }
+            </div>
+        </div>
+    </FormModel>
+    <hr>
+    <div class="d-flex justify-content-end mt-2 mb-2">
+        <button type="submit" @onclick="Save" class="btn btn-success mr-2">Uložit</button>
+    </div>
+    <hr>
+    @if (missingValue)
+    {
+        <div>
+            Chybějící hodnota
+        </div>
+    }
+}
+
+@code{
+    private string competenceEditPath = "/competence/edit";
+    private string leaderEditPath = "/leader/edit";
+    private string participantEditPath = "/participant/edit";
+    private string scheduleEditPath = "/schedule/edit";
+
+}
